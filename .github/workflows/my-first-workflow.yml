@@ -1,1 +1,30 @@
 #Ecrire un GitHub Actions qui utilise un DockerFile pour build une image et la pousser sur docker hub. Il se déclenche au push sur la branche main
+
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.arions29 }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t your-dockerhub-username/your-image-name:latest .
+
+      - name: Push Docker image
+        run: |
+          docker push your-dockerhub-username/your-image-name:latest
